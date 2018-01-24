@@ -17,7 +17,7 @@ namespace CalcConsole
                 {"2","sub"},
                 {"3","mult"},
                 {"4","div"},
-                {"5","ru2euro"}
+                {"5","root"}
 
             };
 

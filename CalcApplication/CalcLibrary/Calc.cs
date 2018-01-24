@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CalcLibrary.Operations;
 using System.Reflection;
+using System.IO;
+
 
 namespace CalcLibrary
 {
@@ -14,20 +16,46 @@ namespace CalcLibrary
         public Calc()
         {
             Operations = new List<IOperation>();
-            //var curAssembly = Assembly.GetExecutingAssembly();
-            var curAssembly = Assembly.LoadFile(
+            var curAssembly = Assembly.GetExecutingAssembly();
+            //операции текущей сборки
+            LoadOperations(curAssembly);
+            //операции сторонних разработчиков
+            var pathExtentions = Path.Combine(Environment.CurrentDirectory, "extentions");
+
+            if (Directory.Exists(pathExtentions))
+            {
+                var assembllies = Directory.GetFiles(pathExtentions, "*.dll");
+
+                foreach (var fileName in assembllies)
+                {
+                    LoadOperations(Assembly.LoadFile(fileName));
+                }
+            }
+
+           /* var curAssembly = Assembly.LoadFile(
                 @"D:\Калькулятор\Calc\CalcApplication\CalcConsole\bin\Debug\extention\Exit.Calculator.Finance.dll"
-            );
+            );*/
+            //LoadOperations(curAssembly);
 
-            var types = curAssembly.GetTypes();
 
+            //рефлексия
+            //var sumType = typeof(SumOperation);
+            //sumType.GetMethods(); = 
+            //sumType.GetInterfaces();
+
+        }
+
+        private void LoadOperations(Assembly assembly)
+        {
+            var types = assembly.GetTypes();
+            var typeOperation = typeof(IOperation);
             foreach (var type in types)
             {
-                if (type.IsAbstract|| type.IsInterface)
+                if (type.IsAbstract || type.IsInterface)
                     continue;
 
                 var interfaces = type.GetInterfaces();
-                if (interfaces.Contains(typeof(IOperation)))
+                if (interfaces.Contains(typeOperation))
                 {
                     var obj = Activator.CreateInstance(type) as IOperation;
                     if (obj != null)
@@ -36,19 +64,12 @@ namespace CalcLibrary
                     }
                 }
             }
-
-            //рефлексия
-            //var sumType = typeof(SumOperation);
-            //sumType.GetMethods();
-            //sumType.GetInterfaces();
-
         }
 
-
-       /* public string[] GetOperationNames()
+       public string[] GetOperationNames()
         {
-            return Operations.Select(it=>it.Name);//помотреть
-        }*/
+            return  Operations.Select(it=>it.Name).ToArray();//помотреть
+        }
 
         public double Exec(string operationName, string[] args)
         {
