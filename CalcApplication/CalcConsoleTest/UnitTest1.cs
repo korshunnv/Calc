@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CalcConsole;
+using CalcLibrary;
 
 namespace CalcConsoleTest
 {
@@ -12,7 +12,7 @@ namespace CalcConsoleTest
         {
             var calc = new Calc();
             var x = 10;
-            var y = 1;
+            var y = 1.0;
             Assert.AreEqual(calc.Sum(x, y), 11);
         }
         [TestMethod]

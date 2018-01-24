@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CalcLibrary
 {
-    class OperationResult : IOperationResult
+     public class OperationResult : IOperationResult
     {
         public OperationResult(double result, string error)
         {

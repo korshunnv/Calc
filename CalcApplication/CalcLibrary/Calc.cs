@@ -14,7 +14,11 @@ namespace CalcLibrary
         public Calc()
         {
             Operations = new List<IOperation>();
-            var curAssembly = Assembly.GetExecutingAssembly();
+            //var curAssembly = Assembly.GetExecutingAssembly();
+            var curAssembly = Assembly.LoadFile(
+                @"D:\Калькулятор\Calc\CalcApplication\CalcConsole\bin\Debug\extention\Exit.Calculator.Finance.dll"
+            );
+
             var types = curAssembly.GetTypes();
 
             foreach (var type in types)
@@ -40,6 +44,11 @@ namespace CalcLibrary
 
         }
 
+
+       /* public string[] GetOperationNames()
+        {
+            return Operations.Select(it=>it.Name);//помотреть
+        }*/
 
         public double Exec(string operationName, string[] args)
         {
