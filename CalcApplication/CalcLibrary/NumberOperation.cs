@@ -12,8 +12,12 @@ namespace CalcLibrary
 
         public IOperationResult Exec(string[] args)
         {
-            var numbers = args.Select(it => Convert.ToDouble(it));
-            return Exec(numbers);
+            if (args.Length > 0)
+            {
+                var numbers = args.Select(it => Convert.ToDouble(it));
+                return Exec(numbers);
+            }
+            return Exec(new double[] { });
         }
 
         public abstract IOperationResult Exec(IEnumerable<double> args);
