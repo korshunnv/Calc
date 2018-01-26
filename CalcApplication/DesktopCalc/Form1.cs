@@ -1,4 +1,5 @@
-﻿using CalcLibrary;
+﻿using CalcDB.Repositories;
+using CalcLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,17 +27,38 @@ namespace DesktopCalc
         {
             lbOperations.Items.Clear();
             lbOperations.Items.AddRange(Calc.GetOperationNames());
-            timer1.Start();
+            //timer1.Start();
         }
 
-/*        private void btnClick_Click(object sender, EventArgs e)
+        private void btnClick_Click(object sender, EventArgs e)
         {
             if (lbOperations.SelectedItem == null)
                 return;
             var oper = lbOperations.SelectedItem.ToString();
             var result = Calc.Exec(oper, tbInput.Text.Trim().Split(' '));
             label1.Text = result.ToString();
-        }*/
+
+            #region Сохранение в БД
+
+            var or = new CalcDB.Models.OperationResult()
+            {
+                OperationId = lbOperations.SelectedIndex,
+                Result = result,
+                ExecutionTime = new Random().Next(100, 4000),
+                Error = "",
+                Args = tbInput.Text.Trim()
+            };
+
+            var operResultRepository = new OperResultRepositiry();
+            operResultRepository.Save(or);
+
+            //operResultRepository.Get(3);
+            //operResultRepository.GetAll();
+            //operResultRepository.GetByOperation(4);
+            operResultRepository.Delete(3);
+
+            #endregion
+        }
 
         private void lbOperations_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -47,7 +69,7 @@ namespace DesktopCalc
 
         private void tbInput_TextChanged(object sender, EventArgs e)
         {
-            //btnClick.Enabled = !string.IsNullOrWhiteSpace(tbInput.Text);
+            btnClick.Enabled = !string.IsNullOrWhiteSpace(tbInput.Text);
 
         }
 
