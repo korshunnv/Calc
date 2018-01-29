@@ -49,7 +49,7 @@ namespace DesktopCalc
                 Args = tbInput.Text.Trim()
             };
 
-            var operResultRepository = new OperResultRepositiry();
+            var operResultRepository = new OperResultRepository();
             operResultRepository.Save(or);
 
             //operResultRepository.Get(3);
